@@ -1,7 +1,7 @@
 {
   "name": "api-rate-limiter",
   "description": "Rate limiter package for Express server API requests",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Anahit Vardanyan",
   "bugs": {
     "url": "https://github.com/anahit42/api-rate-limiter/issues"

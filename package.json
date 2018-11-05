@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "Anahit Vardanyan",
   "bugs": {
-    "url": "https://github.com/anahit42/rate-limiter/issues"
+    "url": "https://github.com/anahit42/api-rate-limiter/issues"
   },
   "contributors": [
     {
@@ -28,7 +28,7 @@
     "node": "10.12.0",
     "npm": "6.4.1"
   },
-  "homepage": "https://github.com/anahit42/rate-limiter#readme",
+  "homepage": "https://github.com/anahit42/api-rate-limiter#readme",
   "keywords": [
     "API",
     "Limit",
@@ -43,7 +43,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anahit42/rate-limiter.git"
+    "url": "git+https://github.com/anahit42/api-rate-limiter.git"
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint ./src --fix",

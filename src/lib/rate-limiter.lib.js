@@ -114,7 +114,9 @@ class RateLimiterLib {
    */
   static async decrementLimit (key) {
     try {
-      await RedisLib.decrementRedisKeyValue(key)
+      const decrementedValue = await RedisLib.decrementRedisKeyValue(key)
+
+      return decrementedValue
     } catch (error) {
       throw new RateLimiterCacheError(error.message)
     }

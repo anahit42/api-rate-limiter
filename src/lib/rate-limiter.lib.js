@@ -49,15 +49,13 @@ class RateLimiterLib {
       const key = RateLimiterLib.generateKey(keyGenerationPayload)
 
       try {
-        const remainingLimit = await RateLimiterLib.getLimit(key)
+        const rateLimit = await RateLimiterLib.getLimit(key)
 
-        if (remainingLimit === null) {
-          return RateLimiterLib.setLimit(key, maxNumberOfRequests - 1, timeWindow)
-        }
+        const remainingLimit = rateLimit === null
+          ? await RateLimiterLib.setLimit(key, maxNumberOfRequests - 1, timeWindow)
+          : await RateLimiterLib.decrementLimit(key)
 
-        const decrementedLimit = await RateLimiterLib.decrementLimit(key)
-
-        const remainingLimitToSetOnHeaders = decrementedLimit < 0 ? 0 : decrementedLimit
+        const remainingLimitToSetOnHeaders = remainingLimit < 0 ? 0 : remainingLimit
 
         const rateLimitData = {
           limit: maxNumberOfRequests,
@@ -67,7 +65,7 @@ class RateLimiterLib {
 
         ResponseManagerUtil.setRateLimitHeaders(response, rateLimitData)
 
-        if (decrementedLimit < 0) {
+        if (remainingLimit < 0) {
           const requestFullPath = RequestManagerUtil.getRequestFullPath(request)
           const requestMethod = request.method
 

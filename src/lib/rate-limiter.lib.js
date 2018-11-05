@@ -20,7 +20,7 @@ class RateLimiterLib {
    * @param {string} payload.serverName
    * @description Set cache client and server name.
    */
-  static init (payload) {
+  init (payload) {
     const { client, serverName } = payload
     RedisLib.setClient(client)
     RedisLib.setServerName(serverName)

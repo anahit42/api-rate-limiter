@@ -58,23 +58,25 @@ class RedisLib {
    * @param {number} data
    * @param {number} expireTimeInSeconds
    * @returns {Promise.<string>} - resolves status of set operation
-   * @description Set in redis.
+   * @description Set data in redis.
    */
-  setInRedis (key, data, expireTimeInSeconds) {
+  async setInRedis (key, data, expireTimeInSeconds) {
     const cacheKey = `${this.serverName}:${key}`
+    const setResult = await this.client.setAsync(cacheKey, data, 'EX', expireTimeInSeconds)
 
-    return this.client.setAsync(cacheKey, data, 'EX', expireTimeInSeconds)
+    return setResult
   }
 
   /**
    * @param {string} key
    * @returns {Promise.<string>} - resolves data found by key
-   * @description Get from redis.
+   * @description Get key value from redis.
    */
-  getFromRedis (key) {
+  async getFromRedis (key) {
     const cacheKey = `${this.serverName}:${key}`
+    const value = await this.client.getAsync(cacheKey)
 
-    return this.client.getAsync(cacheKey)
+    return value
   }
 
   /**
@@ -82,10 +84,11 @@ class RedisLib {
    * @returns {Promise.<number>} - resolves decremented key value
    * @description Decrement key value.
    */
-  decrementRedisKeyValue (key) {
+  async decrementRedisKeyValue (key) {
     const cacheKey = `${this.serverName}:${key}`
+    const value = await this.client.decrAsync(cacheKey)
 
-    return this.client.decrAsync(cacheKey)
+    return value
   }
 }
 

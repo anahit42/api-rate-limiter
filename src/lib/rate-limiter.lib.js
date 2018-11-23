@@ -49,12 +49,10 @@ class RateLimiterLib {
       const key = RateLimiterLib.generateKey(keyGenerationPayload)
 
       try {
-        const rateLimit = await RateLimiterLib.getLimit(key)
+        const decrementedLimit = await RateLimiterLib.decrementLimit(key)
+        const requestsCount = Math.abs(decrementedLimit)
 
-        const remainingLimit = rateLimit === null
-          ? await RateLimiterLib.setLimit(key, maxNumberOfRequests - 1, timeWindow)
-          : await RateLimiterLib.decrementLimit(key)
-
+        const remainingLimit = maxNumberOfRequests - requestsCount
         const remainingLimitToSetOnHeaders = remainingLimit < 0 ? 0 : remainingLimit
 
         const rateLimitData = {
@@ -76,33 +74,6 @@ class RateLimiterLib {
       } catch (error) {
         next(error)
       }
-    }
-  }
-
-  /**
-   * @param {string} key
-   * @returns {Promise<?number>}
-   * @description Get limit.
-   */
-  static async getLimit (key) {
-    const data = await RedisLib.getFromRedis(key)
-
-    return (typeof data === 'string') ? parseInt(data, 10) : null
-  }
-
-  /**
-   * @param {string} key
-   * @param {number} remainingLimit
-   * @param {number} timeWindow
-   * @description Set limit.
-   */
-  static async setLimit (key, remainingLimit, timeWindow) {
-    try {
-      await RedisLib.setInRedis(key, remainingLimit, timeWindow)
-
-      return remainingLimit
-    } catch (error) {
-      throw new RateLimiterCacheError(error.message)
     }
   }
 
